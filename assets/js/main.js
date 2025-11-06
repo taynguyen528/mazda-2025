@@ -172,7 +172,34 @@ function initCarLineup() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCarLineup);
+  document.addEventListener("DOMContentLoaded", () => {
+    initCarLineup();
+    initBackToTop();
+  });
 } else {
   initCarLineup();
+  initBackToTop();
+}
+
+// Back To Top
+function initBackToTop() {
+  const btn = document.querySelector(".backtotop");
+  if (!btn) return;
+  const SHOW_AFTER = 400;
+
+  function onScroll() {
+    if (window.scrollY > SHOW_AFTER) {
+      btn.setAttribute("data-visible", "true");
+    } else {
+      btn.setAttribute("data-visible", "false");
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 }
