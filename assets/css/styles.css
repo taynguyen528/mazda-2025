@@ -100,9 +100,10 @@
 .header__link {
   color: var(--color-text-white);
   text-decoration: none;
-  font-size: var(--fs-14);
+  font-size: var(--fs-16);
   line-height: var(--lh-14-22);
   position: relative;
+  font-weight: var(--fw-semibold);
 }
 .header__link::after {
   content: "";
