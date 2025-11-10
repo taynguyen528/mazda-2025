@@ -175,10 +175,72 @@ if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     initCarLineup();
     initBackToTop();
+    initHeader();
   });
 } else {
   initCarLineup();
   initBackToTop();
+  initHeader();
+}
+
+// Header - Mobile Menu & Sticky
+function initHeader() {
+  const header = document.querySelector(".header");
+  const menuToggle = document.querySelector(".header__menu-toggle");
+  const mobileMenu = document.querySelector(".header__mobile-menu");
+  const SCROLL_THRESHOLD = 50;
+
+  if (!header) return;
+
+  // Sticky header on scroll
+  function handleScroll() {
+    if (window.scrollY > SCROLL_THRESHOLD) {
+      header.classList.add("header--scrolled");
+    } else {
+      header.classList.remove("header--scrolled");
+    }
+  }
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+
+  // Mobile menu toggle
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener("click", () => {
+      const isExpanded = menuToggle.getAttribute("aria-expanded") === "true";
+      menuToggle.setAttribute("aria-expanded", !isExpanded);
+      mobileMenu.setAttribute("aria-hidden", isExpanded);
+      
+      // Prevent body scroll when menu is open
+      if (!isExpanded) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
+      }
+    });
+
+    // Close menu when clicking on a link
+    const mobileLinks = mobileMenu.querySelectorAll(".header__mobile-link");
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        menuToggle.setAttribute("aria-expanded", "false");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        mobileMenu.getAttribute("aria-hidden") === "false" &&
+        !header.contains(e.target)
+      ) {
+        menuToggle.setAttribute("aria-expanded", "false");
+        mobileMenu.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+    });
+  }
 }
 
 // Back To Top
